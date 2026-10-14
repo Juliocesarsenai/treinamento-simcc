@@ -1,6 +1,6 @@
 import os
-
 import psycopg2
+from psycopg2.extras import RealDictCursor
 
 
 class Connection:
@@ -8,9 +8,9 @@ class Connection:
         self,
         database: str = os.getenv("DATABASE", "postgres"),
         user: str = os.getenv("PG_USER", "postgres"),
-        password: str = os.getenv("PASSWORD", "postgres"),
-        host: str = os.getenv("HOST", "localhost"),
-        port: int = int(os.getenv("PORT", "5432")),
+        password: str = os.getenv("PASSWORD", "qualquer_uma"),
+        host: str = os.getenv("HOST", "127.0.0.1"),
+        port: int = int(os.getenv("PORT", "5437")),
     ):
         self.database = database
         self.user = user
@@ -20,12 +20,14 @@ class Connection:
         self.connection = None
 
     def __enter__(self):
-        self.connection = psycopg.connect(
-            dbname=self.database,
+        # Correção do psycopg2 e adição do RealDictCursor para retornar JSON
+        self.connection = psycopg2.connect(
+            database=self.database,
             user=self.user,
             host=self.host,
             password=self.password,
             port=self.port,
+            cursor_factory=RealDictCursor
         )
         return self
 

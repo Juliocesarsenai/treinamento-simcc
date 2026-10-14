@@ -8,7 +8,7 @@ app.register_blueprint(rest_pesquisador)
 
 @app.route("/", methods=["GET"])
 def home():
-    return jsonify({"Hellow World": "🪄"})
+    return jsonify({"Hello World": "🪄"})
 
 
 if __name__ == "__main__":
